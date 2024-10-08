@@ -34,4 +34,18 @@ router.get('/require/:id', function (req, res, next) {
     })
 });
 
+/* POST ONE client */
+router.post('/post', function (req, res, next) {
+  const newClient = new ClientModel({ id: req.body.id, name: req.body.name })
+  newClient.save()
+    .then(() => {
+      console.log('Cliente salvo com sucesso')
+      res.json(newClient)
+    })
+    .catch(errors => {
+      console.error('Erro ao salvar o cliente:', errors)
+      res.status(500).json({ error: errors.message })
+    })
+});
+
 module.exports = router;
