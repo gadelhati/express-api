@@ -14,3 +14,7 @@
 
 ## run app
 	npm start
+
+## database
+    npm install mongodb mongoose
+    https://www.mongodb.com/try/download/community
