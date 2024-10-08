@@ -13,11 +13,6 @@ const clientSchema = new mongoose.Schema({
     name: { type: String, required: true }
 });
 
-const ClientSchema = mongoose.model('Client', clientSchema);
+const ClientModel = mongoose.model('client', clientSchema);
 
-const novoCliente = new ClientSchema({ id: '1', name: 'João' });
-novoCliente.save()
-  .then(() => console.log('Cliente salvo com sucesso'))
-  .catch(err => console.error('Erro ao salvar o cliente:', err));
-
-module.exports = { Mongoose: mongoose, ClientSchema }
+module.exports = { Mongoose: mongoose, ClientModel }
