@@ -8,42 +8,70 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-/* GET ALL clients */
-router.get('/require', function (req, res, next) {
-  ClientModel.find().exec()
+/* GET ALL register */
+router.get('/get', function (req, res, next) {
+  ClientModel.find()
     .then(clients => {
       console.log(clients)
       res.json(clients)
     })
     .catch(errors => {
-      console.error('Erro ao buscar clientes: ', errors)
-      res.status(500).send('Erro ao buscar clientes')
+      console.error('Erro ao buscar registro: ', errors)
+      res.status(500).send('Erro ao buscar registro')
     });
 });
 
-/* GET ONE client */
-router.get('/require/:id', function (req, res, next) {
-  ClientModel.find({ _id: req.params.id }).exec()
+/* GET ONE register */
+router.get('/get/:id', function (req, res, next) {
+  ClientModel.find({ _id: req.params.id })
     .then(client => {
       res.json(client)
       res.end();
     })
     .catch(errors => {
-      console.error('Erro ao buscar cliente: ', errors)
-      res.status(500).send('Erro ao buscar cliente')
+      console.error('Erro ao buscar registro: ', errors)
+      res.status(500).send('Erro ao buscar registro')
     })
 });
 
-/* POST ONE client */
+/* POST ONE register */
 router.post('/post', function (req, res, next) {
-  const newClient = new ClientModel({ id: req.body.id, name: req.body.name })
-  newClient.save()
+  const client = new ClientModel({ id: req.body.id, name: req.body.name })
+  client.save()
     .then(() => {
-      console.log('Cliente salvo com sucesso')
-      res.json(newClient)
+      console.log('Registro salvo com sucesso')
+      res.json(client)
     })
     .catch(errors => {
-      console.error('Erro ao salvar o cliente:', errors)
+      console.error('Erro ao salvar o registro:', errors)
+      res.status(500).json({ error: errors.message })
+    })
+});
+
+/* PUT ONE register */
+router.put('/put/:id', function (req, res, next) {
+  const client = new ClientModel({ id: req.body.id, name: req.body.name })
+  ClientModel.findOneAndUpdate({ _id: req.params.id }, req.body, { upsert: true })
+    .then(() => {
+      console.log('Registro atualizado com sucesso')
+      res.json(client)
+    })
+    .catch(errors => {
+      console.error('Erro ao atualizar o registro:', errors)
+      res.status(500).json({ error: errors.message })
+    })
+});
+
+/* DELETE ONE register */
+router.delete('/delete/:id', function (req, res, next) {
+  const client = new ClientModel({ id: req.body.id, name: req.body.name })
+  client.find({ _id: req.params.id }).save()
+    .then(() => {
+      console.log('Registro deletado com sucesso')
+      res.json(client)
+    })
+    .catch(errors => {
+      console.error('Erro ao deletar o registro:', errors)
       res.status(500).json({ error: errors.message })
     })
 });
