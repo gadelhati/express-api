@@ -1,14 +1,10 @@
 var express = require('express')
 var router = express.Router()
+var db = require('../db')
 const { ClientModel } = require('../db')
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
 /* GET ALL register */
-router.get('/get', function (req, res, next) {
+router.get('/', function (req, res, next) {
   ClientModel.find()
     .then(clients => {
       console.log(clients)
@@ -21,7 +17,7 @@ router.get('/get', function (req, res, next) {
 });
 
 /* GET ONE register */
-router.get('/get/:id', function (req, res, next) {
+router.get('/:id', function (req, res, next) {
   ClientModel.find({ _id: req.params.id })
     .then(client => {
       res.json(client)
@@ -34,7 +30,7 @@ router.get('/get/:id', function (req, res, next) {
 });
 
 /* POST ONE register */
-router.post('/post', function (req, res, next) {
+router.post('/', function (req, res, next) {
   const client = new ClientModel({ id: req.body.id, name: req.body.name })
   client.save()
     .then(() => {
@@ -48,9 +44,9 @@ router.post('/post', function (req, res, next) {
 });
 
 /* PUT ONE register */
-router.put('/put/:id', function (req, res, next) {
+router.put('/:id', function (req, res, next) {
   const client = new ClientModel({ id: req.body.id, name: req.body.name })
-  ClientModel.findOneAndUpdate({ _id: req.params.id })
+  ClientModel.findOneAndUpdate({ _id: req.params.id }, req.body)
     .then(() => {
       console.log('Registro atualizado com sucesso')
       res.json(client)
@@ -62,7 +58,7 @@ router.put('/put/:id', function (req, res, next) {
 });
 
 /* DELETE ONE register */
-router.delete('/delete/:id', function (req, res, next) {
+router.delete('/:id', function (req, res, next) {
   const client = new ClientModel({ id: req.body.id, name: req.body.name })
   ClientModel.findOneAndDelete({ _id: req.params.id })
     .then(() => {
