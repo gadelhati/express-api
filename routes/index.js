@@ -1,6 +1,5 @@
 var express = require('express')
 var router = express.Router()
-var db = require('../db')
 const { ClientModel } = require('../db')
 
 /* GET home page. */
@@ -51,7 +50,7 @@ router.post('/post', function (req, res, next) {
 /* PUT ONE register */
 router.put('/put/:id', function (req, res, next) {
   const client = new ClientModel({ id: req.body.id, name: req.body.name })
-  ClientModel.findOneAndUpdate({ _id: req.params.id }, req.body, { upsert: true })
+  ClientModel.findOneAndUpdate({ _id: req.params.id })
     .then(() => {
       console.log('Registro atualizado com sucesso')
       res.json(client)
@@ -65,7 +64,7 @@ router.put('/put/:id', function (req, res, next) {
 /* DELETE ONE register */
 router.delete('/delete/:id', function (req, res, next) {
   const client = new ClientModel({ id: req.body.id, name: req.body.name })
-  client.find({ _id: req.params.id }).save()
+  ClientModel.findOneAndDelete({ _id: req.params.id })
     .then(() => {
       console.log('Registro deletado com sucesso')
       res.json(client)
